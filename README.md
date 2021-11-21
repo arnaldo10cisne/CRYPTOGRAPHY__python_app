@@ -5,7 +5,7 @@
 
 I got inspired to develop this program because it was a test that was given to me in a technical interview. I wasn't sure how to do it back then, so I decided to give it a try. It can encrypt and decrypt arrays of English words. The word API used to validate words and obtain random ones is  [https://random-word-api.herokuapp.com](https://random-word-api.herokuapp.com/)
     
-![App capture 1](https://res.cloudinary.com/arnaldo10cisne/image/upload/v1637514080/cryptography_app/crypto3_s9w5wd.png)
+![App capture 1](https://res.cloudinary.com/arnaldo10cisne/image/upload/v1637513664/cryptography_app/crypto2_bbpxbj.png)
 ![App capture 2](https://res.cloudinary.com/arnaldo10cisne/image/upload/v1637514080/cryptography_app/crypto3_s9w5wd.png)
 
 
