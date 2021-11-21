@@ -175,8 +175,6 @@ def trial_and_error_method(encrypted_word_list, current_encrypted_word_index, li
             if len(solution) == len(encrypted_word_list) and current_encrypted_word_index+1 == len(encrypted_word_list):
                 global definitive_keys
                 definitive_keys = current_backup_of_keys.copy()
-                print("GENERATED DECRYPTION KEYS")
-                print(current_backup_of_keys)
 
             if len(solution) == len(encrypted_word_list) and current_encrypted_word_index == 0:
                 return solution, definitive_keys
