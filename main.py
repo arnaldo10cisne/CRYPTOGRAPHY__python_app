@@ -141,10 +141,10 @@ def run_app():
         #     possible_solution = patterns_method(encrypted_word_list, response_json_format)
         #     print("The patterns method is under construction. Please select the trial and error.")
 
-        print("\nShowing possible solution\n(The result may be different from the original words)")
+        print("Showing possible solution\n(The result may be different from the original words)")
         show_list_of_words(encrypted_word_list, "\nEncrypted words:")
         print_pretty_keys(generated_decryption_keys, "\nGenerated decryption keys")
-        show_list_of_words(possible_solution, "\n\nDecrypted words:")
+        show_list_of_words(possible_solution, "\nDecrypted words:")
         
         total_time = end_time - start_time
         number_of_words = len(possible_solution)

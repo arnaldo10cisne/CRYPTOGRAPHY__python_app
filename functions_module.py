@@ -34,7 +34,8 @@ def print_pretty_keys(keys,title):
         if items == 4:
             items = 1
             print("|")
-    print("|")
+        if index == len(all_keys) - 1  and items < 4:
+            print("|")
 
 
 def key_already_exists(keys, letter):
