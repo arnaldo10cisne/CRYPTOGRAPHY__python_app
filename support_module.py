@@ -1,6 +1,7 @@
 import requests
 import json
 import os
+import random
 
 
 def clear_screen():

@@ -2,13 +2,6 @@ from support_module import *
 from functions_module import *
 
 
-def exit_program():
-    print("""
-    Thank you for using the Cryptography App.
-    Have a wonderful day! 
-    
-    Press ENTER to exit""")
-
 def menu ():
     return int(input("""
                                                                 
@@ -31,7 +24,7 @@ def menu ():
 
 
 def run_app():
-    """Main flow of the program. Here we call all the functions located in NBA_MODULE.PY"""
+    """Main flow of the program. Here we call all the functions located in FUNCTIONS_MODULE.PY"""
     
     LIST_OF_WORDS = 'https://raw.githubusercontent.com/dwyl/english-words/master/words_dictionary.json'
     RANDOM_WORD_REQUEST = "https://random-word-api.herokuapp.com/word?number=1&swear=0"
@@ -49,7 +42,7 @@ def run_app():
         response_json_format = response.json()
         
         line(60)
-        mode_selection = int(input("""\nWhat mode would you like to run?:\n \n1. Choose my own words to encrypt (Word validation will be applied)\n2. Choose randomly the words to encrypt\n\nSelection: """))
+        mode_selection = int(input("""\nWhat mode would you like to run?:\n \n1. Choose my own words to encrypt (Word validation will be applied)\n2. Choose random words to encrypt\n\nSelection: """))
         l(1)
         line(60)
 
@@ -60,45 +53,67 @@ def run_app():
             
             print("\nPlease enter words of at least 2 letters\n")
             while True:
-                word = input("Next word ({} remaining): ".format(10-word_count))
-                try:
-                    if len(word) < 2:
-                        raise Exception("The words must have more than 2 letters")
-                    aux = response_json_format[word.lower()]
+                word = input("Next word ({} remaining): ".format(5-word_count))
+                if (verify_word_validity(word, response_json_format)):
                     word_count += 1
                     word_list.append(word.lower())
-                except:
+                else:
                     print("Not a vaid word, please choose another one")
-                if word_count == 10:
+                if word_count == 5:
+                    l(1)
                     break
-            
-            print(word_list)
 
-        
         elif mode_selection == 2:
 
             print("\nGetting random words from the internet, please wait...")
             
             while True:
                 word = requests.get(RANDOM_WORD_REQUEST).json()[0]
-                try:
-                    if len(word) < 2:
-                        raise Exception("")
-                    aux = response_json_format[word.lower()]
+                if (verify_word_validity(word, response_json_format)):
                     word_count += 1
                     word_list.append(word.lower())
-                except:
+                else:
                     pass
-                if word_count == 10:
-                    l(2)
+                if word_count == 5:
+                    l(1)
                     break
 
-            print(word_list)
-
+        show_list_of_words(word_list, "List of chosen words")
         
         encrypted_word_list = encrypt_words(word_list)
 
-        print(encrypted_word_list)
+        show_list_of_words(encrypted_word_list, "\nChosen words encrypted")
+
+        l(1)
+        line(60)
+
+        decryption_method = int(input("""\nWhat decryption method would you like to use?:\n(More information about the 2 methods in the ABOUT section on the main menu)\n\n1. Trial and error\n2. Lookin for patterns\n\nSelection: """))
+        l(1)
+        line(60)
+        print("\nDecrypting words, please wait...\n")
+
+        if decryption_method == 1:
+            
+            words_grouped_by_lenght = {}
+            
+            for word in response_json_format:
+                try:
+                    aux = words_grouped_by_lenght[len(word)]
+                    words_grouped_by_lenght[len(word)].append(word)
+                except:
+                    words_grouped_by_lenght[len(word)] = []
+                    words_grouped_by_lenght[len(word)].append(word)
+
+            #print(words_grouped_by_lenght)
+            possible_solution = trial_and_error_method(encrypted_word_list, 0, response_json_format, words_grouped_by_lenght, False)
+
+        elif decryption_method == 2:
+            
+            possible_solution = patterns_method(encrypted_word_list, response_json_format)
+
+        print("Showing possible solution\n(The result may be different from the original words)")
+        show_list_of_words([], "\nDecrypted words:")
+        # show_list_of_words(possible_solution, "\nDecrypted words:")
 
 
     elif response.status_code >= 400:
@@ -107,10 +122,22 @@ def run_app():
     standby()
 
 
+def about():
+    pass
+
+
+def exit_program():
+    print("""
+    Thank you for using the Cryptography App.
+    Have a wonderful day! 
+    
+    Press ENTER to exit""")
+
+
 if __name__ == "__main__":
     while True:
         try:
-            clear_screen()
+            #clear_screen()
             opt = menu()
             if (opt==1):
                 clear_screen()
