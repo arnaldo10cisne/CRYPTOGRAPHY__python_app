@@ -1,7 +1,7 @@
 from support_module import *
 
 
-decryption_keys = {}
+definitive_keys = {}
 
 
 encryption_symbols = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z','@','#','$','%','&']
@@ -17,13 +17,24 @@ def show_list_of_words(list_of_words, title):
 
 
 def verify_word_validity(word, list_of_valid_words):
-    try:
-        if len(word) < 2:
-            raise Exception("")
-        aux = list_of_valid_words[word.lower()]
+    if len(word) >= 2 and word.lower() in list_of_valid_words:
         return True
-    except:
+    else:
         return False
+
+
+def print_pretty_keys(keys,title):
+    print(title.upper())
+    all_keys = list(keys.keys())
+    all_values = list(keys.values())
+    items=1
+    for index in range(len(all_keys)):
+        print("| {} -> {} ".format(all_keys[index],all_values[index]),end="")
+        items += 1
+        if items == 4:
+            items = 1
+            print("|")
+    print("|")
 
 
 def key_already_exists(keys, letter):
@@ -61,10 +72,6 @@ def encrypt_words(orginal_list):
         encrypted_list.append(word_encrypted)
 
     return encrypted_list
-
-
-def update_decryption_keys(current_keys, current_encrypted_word, current_real_word):
-    pass
 
 
 def get_key_from_value(dictionary, value):
@@ -166,11 +173,13 @@ def trial_and_error_method(encrypted_word_list, current_encrypted_word_index, li
                 continue
             
             if len(solution) == len(encrypted_word_list) and current_encrypted_word_index+1 == len(encrypted_word_list):
+                global definitive_keys
+                definitive_keys = current_backup_of_keys.copy()
                 print("GENERATED DECRYPTION KEYS")
                 print(current_backup_of_keys)
 
             if len(solution) == len(encrypted_word_list) and current_encrypted_word_index == 0:
-                return solution
+                return solution, definitive_keys
 
             break
         else:

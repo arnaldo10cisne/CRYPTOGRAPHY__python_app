@@ -2,6 +2,7 @@ import requests
 import json
 import os
 import random
+import time
 
 
 def clear_screen():
