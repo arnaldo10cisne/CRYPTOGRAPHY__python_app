@@ -38,7 +38,6 @@ def run_app():
         print("Data fetched succesfully!")
         l(1)
         
-        #First we need to order the fetched array, so we are able to search for values on it.
         response_json_format = response.json()
         
         line(60)
@@ -87,7 +86,7 @@ def run_app():
         l(1)
         line(60)
 
-        decryption_method = int(input("""\nWhat decryption method would you like to use?:\n(More information about the 2 methods in the ABOUT section on the main menu)\n\n1. Trial and error\n2. Lookin for patterns\n\nSelection: """))
+        decryption_method = int(input("""\nWhat decryption method would you like to use?:\n(More information about the 2 methods in the ABOUT section on the main menu)\n\n1. Trial and error\n2. Looking for patterns (CURRENTLY UNAVAILABLE)\n\nSelection: """))
         l(1)
         line(60)
         print("\nDecrypting words, please wait...\n")
@@ -104,7 +103,6 @@ def run_app():
                     words_grouped_by_lenght[len(word)] = []
                     words_grouped_by_lenght[len(word)].append(word)
 
-            #print(words_grouped_by_lenght)
             possible_solution = trial_and_error_method(encrypted_word_list, 0, response_json_format, words_grouped_by_lenght, {})
 
         elif decryption_method == 2:
@@ -112,19 +110,61 @@ def run_app():
             possible_solution = patterns_method(encrypted_word_list, response_json_format)
 
         print("\nShowing possible solution\n(The result may be different from the original words)")
-        show_list_of_words([], "\nDecrypted words:")
-        # show_list_of_words(possible_solution, "\nDecrypted words:")
+        show_list_of_words(encrypted_word_list, "\nEncrypted words:")
+        show_list_of_words(possible_solution, "\nDecrypted words:")
+
+        print("\nThank you for using the Cryptography App! Returning to the main menu")
 
 
     elif response.status_code >= 400:
         print("Error")
 
     standby()
-    solution = []
 
 
 def about():
-    pass
+    print("""
+    
+    Program created by Arnaldo Cisneros. I got inspired to develop it because it was a test that was given to me in a technical interview. I wasn't sure how to do it back then, but everytime we are faced with a problem that we don't know how to solve, but do it anyways, we become a better person.
+    
+    This program can encrypt and decrypt arrays of english words.
+    
+    The ENCRYPTION process is very straight forward. We just need to change each of the letters in the array to a new one, creating an encryption key in the process to make th changes consistent.
+    
+    This way, if we have the following array of words:
+    --> ['selfish','fish','fishing','jellyfish'] <--
+    We can change each of the letters for another random symbol, creating the following encryption guide: ('->' = 'becomes')
+    
+    | S -> M | E -> W | L -> P | F -> R |
+    | I -> N | H -> F | N -> Q | G -> K |
+             | J -> $ | Y -> # |
+    
+    At the end of the encryption process, we are going to have the following encrypted array, ready to be decrypted:
+    --> ['mwprnmf','rnmf','rnmfnqk','$wpp#rnmf'] <--
+
+    The DECRYPTION process is more complex, and the algorithm used here is a simple trial and error with a recursive function. First, we need to separate all the valid english words in number of characters. This way, we'll have a structure similar to this one:
+
+    1 : ['a','e','i','o','u', ...]
+    2 : ['me','he','it','we','us', ...]
+    3 : ['him','you','red','win','boy', ...]
+    4 : ['girl','ways','lego','cold','moon', ...]
+    ....
+
+    Then, we'll go over each of the encrypted words and asign it to the ones that have the same ammount of characters, creating a possible encryption guide during the process. 
+    If we run out of possible matches on one word, we go back to the previous one, and find the next possible result, modifying the encryption guide until we have one that gives satisfying results on all the encrypted words.
+
+    The word API used to validate words and obtaining random ones is: https://random-word-api.herokuapp.com
+    
+    Developed in the city of Medellín, Colombia. November, 2021.
+    
+    Visit me on my social media!
+    Linekdin:         https://www.linkedin.com/in/arnaldo10cisne/
+    Github:           https://github.com/arnaldo10cisne
+    Personal website: https://www.arnaldocisneros.com/
+    
+    
+    """)
+    standby()
 
 
 def exit_program():
@@ -138,7 +178,7 @@ def exit_program():
 if __name__ == "__main__":
     while True:
         try:
-            #clear_screen()
+            clear_screen()
             opt = menu()
             if (opt==1):
                 clear_screen()
