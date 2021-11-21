@@ -111,7 +111,7 @@ def run_app():
             
             possible_solution = patterns_method(encrypted_word_list, response_json_format)
 
-        print("Showing possible solution\n(The result may be different from the original words)")
+        print("\nShowing possible solution\n(The result may be different from the original words)")
         show_list_of_words([], "\nDecrypted words:")
         # show_list_of_words(possible_solution, "\nDecrypted words:")
 
@@ -137,7 +137,7 @@ def exit_program():
 if __name__ == "__main__":
     while True:
         try:
-            #clear_screen()
+            clear_screen()
             opt = menu()
             if (opt==1):
                 clear_screen()
