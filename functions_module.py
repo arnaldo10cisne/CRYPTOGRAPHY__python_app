@@ -125,14 +125,21 @@ def decryption_match(encrypted, real, keys):
         if real in keys:
             return 'no_match'
         else:
-            if encrypted in keys.values():
-                return 'duplicate_key_error'
-            else:
+            if not (encrypted in keys.values()):
                 return 'create_key'
+            else:
+                return 'no_match'
 
 
 
-def trial_and_error_method(encrypted_word_list, current_encrypted_word_index, list_of_valid_words, words_grouped_by_lenght, go_back):
+def trial_and_error_method(encrypted_word_list, current_encrypted_word_index, list_of_valid_words, words_grouped_by_lenght, current_decryption_keys):
+
+    #global decryption_keys
+    global solution
+
+    initial_keys_state = current_decryption_keys.copy()
+
+    #print(current_decryption_keys)
 
     current_real_word_index = 0
 
@@ -143,7 +150,7 @@ def trial_and_error_method(encrypted_word_list, current_encrypted_word_index, li
         #print("Entro 1")
         
         try:
-            current_backup_of_keys = decryption_keys.copy()
+            current_backup_of_keys = current_decryption_keys.copy()
             #print("INITIAL CURRENT BACKUP KEYS = {}".format(current_backup_of_keys))
             #print("DECRYPTION KEYS = {}".format(decryption_keys))
             current_encrypted_word = encrypted_word_list[current_encrypted_word_index]
@@ -151,7 +158,7 @@ def trial_and_error_method(encrypted_word_list, current_encrypted_word_index, li
             current_real_word = array_of_matching_lenght[current_real_word_index]
             encrypted_word_matches_keys = True
         except Exception as e:
-            #print(e)
+            print("BIG ERROR OCURRED: ",e)
             pass
 
         #print("Entro 2, comparing {} with {}".format(current_encrypted_word,current_real_word))
@@ -175,9 +182,6 @@ def trial_and_error_method(encrypted_word_list, current_encrypted_word_index, li
                 current_backup_of_keys[current_real_word[index]] = current_encrypted_word[index]
                 #print("Entro 6")
 
-            if matching_results == 'duplicate_key_error':
-                #print("AN ERROR OCURRED, DUPLICATE VALUES IN THE KEYS, current_real_word_index= {}, real word={}".format(current_real_word_index,current_real_word))
-                pass
 
         #print("Entro 6.5")
         
@@ -192,14 +196,55 @@ def trial_and_error_method(encrypted_word_list, current_encrypted_word_index, li
         if word_exist and encrypted_word_matches_keys:
             #WE CALL THE NEXT ITERATION OF RECURSIVE METHOD HERE
             #print("Entro 8")
-            print("Found match")
-            print("{} matches with {}".format(current_encrypted_word, current_real_word))
-            current_backup_of_keys = {}
+            #print("Found match")
+            #print("{} matches with {}".format(current_encrypted_word, current_real_word))
+            #current_backup_of_keys = {}
             
+            solution.append(current_real_word)
+            #decryption_keys = current_backup_of_keys.copy()
+
+            #print(current_backup_of_keys)
+
+            if current_encrypted_word_index+1 < len(encrypted_word_list):
+                # print("""\nEnter recursion. Loop data:
+                
+                # current encrypted word: {}
+                # current real word: {}
+                # current backup keys: {}
+                # current real word index: {}""".format(current_encrypted_word,current_real_word,current_backup_of_keys, current_real_word_index))
+                
+                trial_and_error_method(encrypted_word_list, current_encrypted_word_index+1, list_of_valid_words, words_grouped_by_lenght, current_backup_of_keys)
+
+                # print("""\nExit recursion. Loop data:
+                
+                # current encrypted word: {}
+                # current real word: {}
+                # current backup keys: {}
+                # current real word index: {}""".format(current_encrypted_word,current_real_word,current_backup_of_keys, current_real_word_index))
+                
+            #print(len(solution))
+            #print(solution)
+
+            if len(solution) < len(encrypted_word_list):
+                current_real_word_index +=1
+                current_backup_of_keys = initial_keys_state.copy()
+                solution.pop()
+                continue
+            if len(solution) == len(encrypted_word_list) and current_encrypted_word_index+1 == len(encrypted_word_list):
+                print("DEFINITIVE DECRYPTION KEYS")
+                print(current_backup_of_keys)
+                print("SOLUTION")
+                print(solution)
+
+                
+
             break
         else:
             current_real_word_index +=1
-            current_backup_of_keys = {}
+            current_backup_of_keys = initial_keys_state.copy()
+            if current_real_word_index == len(array_of_matching_lenght):
+                #print("NO OPTIONS AVAILABLE")
+                break
             #print("ENDING DECRYPTION KEYS = {}".format(decryption_keys))
             #print("Entro 9")
 

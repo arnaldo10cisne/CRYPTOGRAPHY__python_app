@@ -53,13 +53,13 @@ def run_app():
             
             print("\nPlease enter words of at least 2 letters\n")
             while True:
-                word = input("Next word ({} remaining): ".format(5-word_count))
+                word = input("Next word ({} remaining): ".format(3-word_count))
                 if (verify_word_validity(word, response_json_format)):
                     word_count += 1
                     word_list.append(word.lower())
                 else:
                     print("Not a vaid word, please choose another one")
-                if word_count == 5:
+                if word_count == 3:
                     l(1)
                     break
 
@@ -74,7 +74,7 @@ def run_app():
                     word_list.append(word.lower())
                 else:
                     pass
-                if word_count == 5:
+                if word_count == 3:
                     l(1)
                     break
 
@@ -105,7 +105,7 @@ def run_app():
                     words_grouped_by_lenght[len(word)].append(word)
 
             #print(words_grouped_by_lenght)
-            possible_solution = trial_and_error_method(encrypted_word_list, 0, response_json_format, words_grouped_by_lenght, False)
+            possible_solution = trial_and_error_method(encrypted_word_list, 0, response_json_format, words_grouped_by_lenght, {})
 
         elif decryption_method == 2:
             
@@ -120,6 +120,7 @@ def run_app():
         print("Error")
 
     standby()
+    solution = []
 
 
 def about():
@@ -137,7 +138,7 @@ def exit_program():
 if __name__ == "__main__":
     while True:
         try:
-            clear_screen()
+            #clear_screen()
             opt = menu()
             if (opt==1):
                 clear_screen()
