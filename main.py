@@ -4,17 +4,18 @@ from functions_module import *
 
 def menu ():
     return int(input("""
-                                                                
-   (                     )                            )      
-   )\  (   (          ( /(     (  ( (      )       ( /((     
- (((_) )(  )\ ) `  )  )\())(   )\))()(  ( /( `  )  )\())\ )  
- )\___(()\(()/( /(/( (_))/ )\ ((_))(()\ )(_))/(/( ((_)(()/(  
-((/ __|((_))(_)|(_)_\| |_ ((_) (()(_|(_|(_)_((_)_\| |(_)(_)) 
- | (__| '_| || | '_ \)  _/ _ \/ _` | '_/ _` | '_ \) ' \ || | 
-  \___|_|  \_, | .__/ \__\___/\__, |_| \__,_| .__/|_||_\_, | 
-           |__/|_|            |___/         |_|        |__/ 
-
-
+                                                                    
+       ______                 __                               __         
+      / ____/______  ______  / /_____  ____ __________ _____  / /_  __  __
+     / /   / ___/ / / / __ \/ __/ __ \/ __ `/ ___/ __ `/ __ \/ __ \/ / / /
+    / /___/ /  / /_/ / /_/ / /_/ /_/ / /_/ / /  / /_/ / /_/ / / / / /_/ / 
+    \____/_/   \__, / .___/\__/\____/\__, /_/   \__,_/ .___/_/ /_/\__, /  
+              /____/_/              /____/          /_/_    ____ /____/   
+                                                    /   |  / __ \/ __ \   
+                                                   / /| | / /_/ / /_/ /   
+                                                  / ___ |/ ____/ ____/    
+                                                 /_/  |_/_/   /_/                                            
+    
     Welcome to the Cryptography App. Please select an option:
 
     1. Start this App
@@ -81,7 +82,7 @@ def run_app():
         
         encrypted_word_list = encrypt_words(word_list)
 
-        show_list_of_words(encrypted_word_list, "\nChosen words encrypted")
+        show_list_of_words(encrypted_word_list, "\nEncryption applied")
 
         l(1)
         line(60)
@@ -125,24 +126,30 @@ def run_app():
 def about():
     print("""
     
-    Program created by Arnaldo Cisneros. I got inspired to develop it because it was a test that was given to me in a technical interview. I wasn't sure how to do it back then, but everytime we are faced with a problem that we don't know how to solve, but do it anyways, we become a better person.
+    Program created by Arnaldo Cisneros. I got inspired to develop it because it was a test that was given
+    to me in a technical interview. I wasn't sure how to do it back then, but every time we are faced with
+    a problem that we don't know how to solve, but do it anyway, we become a better person.
     
-    This program can encrypt and decrypt arrays of english words.
+    This program can encrypt and decrypt arrays of English words.
     
-    The ENCRYPTION process is very straight forward. We just need to change each of the letters in the array to a new one, creating an encryption key in the process to make th changes consistent.
+    The ENCRYPTION process is very straightforward. We just need to change each of the letters in the array
+    to a new one, creating an encryption key in the process to make the changes consistent.
     
     This way, if we have the following array of words:
     --> ['selfish','fish','fishing','jellyfish'] <--
-    We can change each of the letters for another random symbol, creating the following encryption guide: ('->' = 'becomes')
+    We can change each of the letters for another random symbol, creating the following encryption guide: 
     
+    ('->' = 'becomes')
     | S -> M | E -> W | L -> P | F -> R |
     | I -> N | H -> F | N -> Q | G -> K |
              | J -> $ | Y -> # |
     
-    At the end of the encryption process, we are going to have the following encrypted array, ready to be decrypted:
+    At the end of the encryption process, we'll have the following encrypted array, ready to be decrypted:
     --> ['mwprnmf','rnmf','rnmfnqk','$wpp#rnmf'] <--
 
-    The DECRYPTION process is more complex, and the algorithm used here is a simple trial and error with a recursive function. First, we need to separate all the valid english words in number of characters. This way, we'll have a structure similar to this one:
+    The DECRYPTION process is more complex, and the algorithm used here is a simple trial and error with a
+    recursive function. First, we need to separate all the valid english words in number of characters. 
+    This way, we'll have a structure similar to this one:
 
     1 : ['a','e','i','o','u', ...]
     2 : ['me','he','it','we','us', ...]
@@ -150,12 +157,14 @@ def about():
     4 : ['girl','ways','lego','cold','moon', ...]
     ....
 
-    Then, we'll go over each of the encrypted words and asign it to the ones that have the same ammount of characters, creating a possible encryption guide during the process. 
-    If we run out of possible matches on one word, we go back to the previous one, and find the next possible result, modifying the encryption guide until we have one that gives satisfying results on all the encrypted words.
+    Then, we'll go over each of the encrypted words and assign them to the ones that have the same amount of 
+    characters, creating a possible encryption guide during the process.  
+    If we run out of possible matches on one word, we go back to the previous one, and find the next possible 
+    result, changing the encryption guide until we have one that gives good results on all the encrypted words.
 
-    The word API used to validate words and obtaining random ones is: https://random-word-api.herokuapp.com
+    The word API used to validate words and obtain random ones is: https://random-word-api.herokuapp.com
     
-    Developed in the city of Medellín, Colombia. November, 2021.
+    Developed in the city of Medellín, Colombia. November 2021.
     
     Visit me on my social media!
     Linekdin:         https://www.linkedin.com/in/arnaldo10cisne/
