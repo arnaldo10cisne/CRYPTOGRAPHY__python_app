@@ -1,13 +1,13 @@
 from support_module import *
 
 
-definitive_keys = {}
-
+pattern_characters = ['0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F']
 
 encryption_symbols = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z','@','#','$','%','&']
 
-
 solution = []
+
+definitive_keys = {}
 
 
 def show_list_of_words(list_of_words, title):
@@ -73,6 +73,26 @@ def encrypt_words(orginal_list):
         encrypted_list.append(word_encrypted)
 
     return encrypted_list
+
+
+def get_pattern(word):
+    
+    global pattern_characters
+
+    character_relation = {}
+    current_pattern_character = 0
+    current_pattern_string = ''
+
+    for letter in word.lower():
+        if letter in character_relation:
+            current_pattern_string += character_relation[letter]
+        else:
+            character_relation[letter] = pattern_characters[current_pattern_character]
+            current_pattern_string += pattern_characters[current_pattern_character]
+            current_pattern_character += 1
+
+    return current_pattern_string
+
 
 
 def get_key_from_value(dictionary, value):
@@ -188,5 +208,70 @@ def trial_and_error_method(encrypted_word_list, current_encrypted_word_index, li
                 break
 
 
-def patterns_method(encrypted_word_list, list_of_valid_words):
-    return []
+def patterns_method(encrypted_word_list, current_encrypted_word_index, list_of_valid_words, words_grouped_by_pattern, current_decryption_keys):
+
+    global solution
+
+    if current_encrypted_word_index == 0 and len(solution) > 0:
+        solution = []
+
+    initial_keys_state = current_decryption_keys.copy()
+
+    current_real_word_index = 0
+
+    while True:
+        
+        try:
+            current_backup_of_keys = current_decryption_keys.copy()
+            current_encrypted_word = encrypted_word_list[current_encrypted_word_index]
+            array_of_matching_pattern = words_grouped_by_pattern[get_pattern(current_encrypted_word)]
+            current_real_word = array_of_matching_pattern[current_real_word_index]
+            encrypted_word_matches_keys = True
+        except Exception as e:
+            print("BIG ERROR OCURRED: ",e)
+            pass
+
+        for index in range(len(current_encrypted_word)):
+            
+            matching_results = decryption_match(current_encrypted_word[index], current_real_word[index], current_backup_of_keys)
+
+            if matching_results == "no_match":
+                encrypted_word_matches_keys = False
+
+
+            if matching_results == "create_key":
+                current_backup_of_keys[current_real_word[index]] = current_encrypted_word[index]
+        
+        possible_result = decrypt_using_keys(current_encrypted_word, current_backup_of_keys)
+
+        word_exist = verify_word_validity(possible_result, list_of_valid_words)
+
+
+        if word_exist and encrypted_word_matches_keys:
+            
+            solution.append(current_real_word)
+
+            if current_encrypted_word_index+1 < len(encrypted_word_list):
+                patterns_method(encrypted_word_list, current_encrypted_word_index+1, list_of_valid_words, words_grouped_by_pattern, current_backup_of_keys)
+
+            if len(solution) < len(encrypted_word_list):
+                current_real_word_index +=1
+                current_backup_of_keys = initial_keys_state.copy()
+                solution.pop()
+                if current_real_word_index == len(array_of_matching_pattern):
+                    break
+                continue
+            
+            if len(solution) == len(encrypted_word_list) and current_encrypted_word_index+1 == len(encrypted_word_list):
+                global definitive_keys
+                definitive_keys = current_backup_of_keys.copy()
+
+            if len(solution) == len(encrypted_word_list) and current_encrypted_word_index == 0:
+                return solution, definitive_keys
+
+            break
+        else:
+            current_real_word_index +=1
+            current_backup_of_keys = initial_keys_state.copy()
+            if current_real_word_index == len(array_of_matching_pattern):
+                break

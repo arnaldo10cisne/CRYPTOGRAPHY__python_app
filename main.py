@@ -108,11 +108,11 @@ def run_app():
 
         while True:
             try:
-                decryption_method = int(input("""\nWhat decryption method would you like to use?:\n\nNOTE: The decryption process is going to be from scratch.\nThe original words and keys are not going to be used.\nDepending on the words, the result may take a while\n\n1. Trial and error\n-. Looking for patterns (CURRENTLY UNAVAILABLE)\n\nSelection: """))
-                if decryption_method != 1:
-                    raise Exception("")
-                else:
+                decryption_method = int(input("""\nWhat decryption method would you like to use?:\n\nNOTE: The decryption process is going to be from scratch.\nThe original words and keys are not going to be used.\nDepending on the words, the result may take a while\n\n1. Trial and error\n2. Looking for patterns\n\nSelection: """))
+                if decryption_method in (1,2):
                     break
+                else:
+                    raise Exception("")
             except:
                 pass
 
@@ -136,10 +136,22 @@ def run_app():
             possible_solution, generated_decryption_keys = trial_and_error_method(encrypted_word_list, 0, response_json_format, words_grouped_by_lenght, {})
             end_time = time.time()
 
-        # elif decryption_method == 2:
+        elif decryption_method == 2:
             
-        #     possible_solution = patterns_method(encrypted_word_list, response_json_format)
-        #     print("The patterns method is under construction. Please select the trial and error.")
+            words_grouped_by_pattern = {}
+
+            for word in response_json_format:
+                
+                if get_pattern(word) in words_grouped_by_pattern:
+                    words_grouped_by_pattern[get_pattern(word)].append(word)
+                else:
+                    words_grouped_by_pattern[get_pattern(word)] = []
+                    words_grouped_by_pattern[get_pattern(word)].append(word)
+            
+            start_time = time.time()
+            possible_solution, generated_decryption_keys = patterns_method(encrypted_word_list, 0, response_json_format, words_grouped_by_pattern, {})
+            end_time = time.time()
+        
 
         print("Showing possible solution\n(The result may be different from the original words)")
         show_list_of_words(encrypted_word_list, "\nEncrypted words:")
